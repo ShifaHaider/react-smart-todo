@@ -36,7 +36,10 @@ class Login extends Component {
         loginData[p] = e.target.value;
         this.setState({loginData: loginData})
     }
-
+    Register() {
+        console.log(this.props);
+        this.props.history.push('/register')
+    }
     render() {
         return (
             <div>
@@ -55,7 +58,8 @@ class Login extends Component {
                     type="password"
                     value={this.state.loginData.logPassword}
                     onChange={this.handleChangeLog.bind(this, 'logPassword')}/><br/>
-                <RaisedButton label='Login' secondary={true} onClick={this.loginAccount.bind(this)}/>
+                <RaisedButton label='Login' secondary={true} onClick={this.loginAccount.bind(this)}/><br/><br/>
+                <RaisedButton label='Register' primary={true} onClick={this.Register.bind(this)}/>
             </div>
         )
     }
