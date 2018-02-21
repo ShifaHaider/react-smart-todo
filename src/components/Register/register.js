@@ -3,15 +3,7 @@ import firebase from 'firebase'
 import firestore from 'firebase/firestore'
 import App from "../../App";
 
-var config = {
-    apiKey: "AIzaSyAUItwpA9AmbqxtBKNcJSuRvXCbOMuSQkQ",
-    authDomain: "react-smart-todo.firebaseapp.com",
-    databaseURL: "https://react-smart-todo.firebaseio.com",
-    projectId: "react-smart-todo",
-    storageBucket: "react-smart-todo.appspot.com",
-    messagingSenderId: "659919751663"
-};
-firebase.initializeApp(config);
+
 
 class Register extends Component {
     constructor(props) {
@@ -41,15 +33,16 @@ class Register extends Component {
                 db.collection('Users').doc(data.uid).set(userData)
             })
             .catch((error) => {
-                console.log(error);
+                alert(error.message)
             });
     }
 
     loginAccount() {
         firebase.auth().signInWithEmailAndPassword(this.state.loginData.logEmail, this.state.loginData.logPassword)
             .then((data) => {
+
+                console.log(localStorage.setItem('Id', data.uid));
                 console.log(this.props.history.push('./dashboard'));
-                localStorage.setItem('Id',data.uid);
             })
             .catch((error) => {
                 console.log(error);

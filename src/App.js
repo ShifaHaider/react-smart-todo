@@ -1,9 +1,22 @@
 import React, {Component} from 'react';
 import './App.css';
+import createBrowserHistory from 'history/createBrowserHistory'
+
 import Register from './components/Register/register'
 import Dashboard from './components/dashboard/dashboard'
 import {Router, Route, Switch, Link} from 'react-router-dom'
-import createBrowserHistory from 'history/createBrowserHistory'
+import firebase from 'firebase'
+import firestore from 'firebase/firestore'
+var config = {
+    apiKey: "AIzaSyAUItwpA9AmbqxtBKNcJSuRvXCbOMuSQkQ",
+    authDomain: "react-smart-todo.firebaseapp.com",
+    databaseURL: "https://react-smart-todo.firebaseio.com",
+    projectId: "react-smart-todo",
+    storageBucket: "react-smart-todo.appspot.com",
+    messagingSenderId: "659919751663"
+};
+firebase.initializeApp(config);
+
 const history = createBrowserHistory();
 
 
