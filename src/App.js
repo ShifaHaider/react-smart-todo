@@ -3,6 +3,7 @@ import './App.css';
 import createBrowserHistory from 'history/createBrowserHistory'
 
 import Register from './components/Register/register'
+import Login from './components/login/login'
 import Dashboard from './components/dashboard/dashboard'
 import {Router, Route, Switch, Link} from 'react-router-dom'
 import firebase from 'firebase'
@@ -29,6 +30,7 @@ class App extends Component {
                         <Switch>
                             <Route exact path={'/'} component={Register}/>
                             <Route exact path={'/register'} component={Register}/>
+                            <Route exact path={'/login'} component={Login}/>
                             <Route exact path={'/dashboard'} component={Dashboard}/>
                         </Switch>
                     </div>

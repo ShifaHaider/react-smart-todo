@@ -2,8 +2,11 @@ import React, {Component} from 'react';
 import firebase from 'firebase'
 import firestore from 'firebase/firestore'
 import App from "../../App";
-
-
+import '../../index.css';
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import AppBar from 'material-ui/AppBar';
 
 class Register extends Component {
     constructor(props) {
@@ -14,14 +17,9 @@ class Register extends Component {
                 email: '',
                 password: '',
                 phone: ''
-            },
-            loginData: {
-                logEmail: '',
-                logPassword: ''
             }
-        };
-
-    }
+        }
+    };
 
     createAccount() {
         var db = firebase.firestore();
@@ -30,24 +28,15 @@ class Register extends Component {
             .then((data) => {
                 console.log(data.uid);
                 var userData = this.state.userData;
-                db.collection('Users').doc(data.uid).set(userData)
+                db.collection('Users').doc(data.uid).set(userData);
+                this.props.history.push('/login');
+
             })
             .catch((error) => {
                 alert(error.message)
             });
     }
 
-    loginAccount() {
-        firebase.auth().signInWithEmailAndPassword(this.state.loginData.logEmail, this.state.loginData.logPassword)
-            .then((data) => {
-
-                console.log(localStorage.setItem('Id', data.uid));
-                console.log(this.props.history.push('./dashboard'));
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
 
     handleChangeReg(p, e) {
         var userData = this.state.userData;
@@ -55,31 +44,38 @@ class Register extends Component {
         this.setState({userData: userData})
     }
 
-    handleChangeLog(p,e) {
-        var loginData = this.state.loginData;
-       loginData[p] = e.target.value;
-        this.setState({loginData: loginData})
-    }
 
     render() {
         return (
             <div>
-                <input type="text" placeholder='Name' value={this.state.userData.name}
-                       onChange={this.handleChangeReg.bind(this, 'name')}/><br/>
-                <input type="text" placeholder='Email' value={this.state.userData.email}
-                       onChange={this.handleChangeReg.bind(this, 'email')}/><br/>
-                <input type="password" placeholder='Password' value={this.state.userData.password}
-                       onChange={this.handleChangeReg.bind(this, 'password')}/><br/>
-                <input type="number" placeholder='PhoneNumber' value={this.state.userData.phone}
-                       onChange={this.handleChangeReg.bind(this, 'phone')}/><br/>
-                <button onClick={this.createAccount.bind(this)}>Register</button>
-                <div>
-                <input type="text" placeholder='Email' value={this.state.loginData.logEmail}
-                onChange={this.handleChangeLog.bind(this,'logEmail')}/><br/>
-                <input type="password" placeholder='Password' value={this.state.loginData.logPassword}
-                onChange={this.handleChangeLog.bind(this,'logPassword')}/><br/>
-                <button onClick={this.loginAccount.bind(this)}>Login</button>
-                </div>
+                <AppBar
+                    title= 'Register'
+                />
+                <TextField
+                    hintText="Name Field"
+                    floatingLabelText="Name"
+                    type="text"
+                    value={this.state.userData.name}
+                    onChange={this.handleChangeReg.bind(this, 'name')}/><br/>
+                <TextField
+                    hintText="Email Field"
+                    floatingLabelText="Email"
+                    type="text"
+                    value={this.state.userData.email}
+                    onChange={this.handleChangeReg.bind(this, 'email')}/><br/>
+                <TextField
+                    hintText="Password Field"
+                    floatingLabelText="Password"
+                    type="password"
+                    value={this.state.userData.password}
+                    onChange={this.handleChangeReg.bind(this, 'password')}/><br/>
+                <TextField
+                    hintText="Phone Number"
+                    floatingLabelText="Phone Number"
+                    type="number"
+                    value={this.state.userData.phone}
+                    onChange={this.handleChangeReg.bind(this, 'phone')}/><br/>
+                <RaisedButton label='Register' secondary={true} onClick={this.createAccount.bind(this)}/>
             </div>
         )
     }

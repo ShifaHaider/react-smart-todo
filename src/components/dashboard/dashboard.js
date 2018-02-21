@@ -29,7 +29,7 @@ class Dashboard extends Component {
 
     logOut() {
         console.log(this.props);
-        this.props.history.push('./register')
+        this.props.history.push('/register')
     }
 
     render() {
