@@ -7,6 +7,8 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import AppBar from 'material-ui/AppBar';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 class Register extends Component {
     constructor(props) {
@@ -17,7 +19,9 @@ class Register extends Component {
                 email: '',
                 password: '',
                 phone: ''
-            }
+            },
+            message: '',
+            isAlertOpen: false
         }
     };
 
@@ -33,27 +37,30 @@ class Register extends Component {
 
             })
             .catch((error) => {
-                alert(error.message)
+                this.setState({message: error.message, isAlertOpen: true});
             });
     }
-
 
     handleChangeReg(p, e) {
         var userData = this.state.userData;
         userData[p] = e.target.value;
         this.setState({userData: userData})
     }
+
     login() {
         console.log(this.props);
         this.props.history.push('/login')
     }
 
+    close() {
+        this.setState({isAlertOpen: false});
+    }
+
     render() {
+
         return (
             <div>
-                <AppBar
-                    title= 'Register'
-                />
+                <AppBar title='Register'/>
                 <TextField
                     hintText="Name Field"
                     floatingLabelText="Name"
@@ -80,6 +87,19 @@ class Register extends Component {
                     onChange={this.handleChangeReg.bind(this, 'phone')}/><br/>
                 <RaisedButton label='Register' secondary={true} onClick={this.createAccount.bind(this)}/><br/><br/>
                 <RaisedButton label='Login' primary={true} onClick={this.login.bind(this)}/>
+
+
+                <Dialog
+                    actions={<FlatButton
+                        label="Cancel"
+                        primary={true}
+                        onClick={this.close.bind(this)}
+
+                    />}
+                    modal={false}
+                    open={this.state.isAlertOpen}>
+                    {this.state.message}
+                </Dialog>
             </div>
         )
     }
