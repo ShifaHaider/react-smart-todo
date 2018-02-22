@@ -15,14 +15,15 @@ class Dashboard extends Component {
         this.state = {
             userData: {},
             todoText: 'Hello World ',
-            todo:[]
+            todo: []
         };
         this.resultForLogin();
     }
+
     db = firebase.firestore();
     id = localStorage.getItem('Id');
-     ref = this.db.collection('Users').doc(this.id);
-     todoRef = this.ref.collection('todos');
+    ref = this.db.collection('Users').doc(this.id);
+    todoRef = this.ref.collection('todos');
 
     resultForLogin() {
         this.ref.get().then((userData) => {
@@ -52,16 +53,22 @@ class Dashboard extends Component {
         // this.setState({todo: arr});
     }
 
-    // add() {
-    //
-    //     todoRef.add({
-    //         todo: inp.value,
-    //         time: Date.now()
-    //     });
-    //
-    //     console.log(inp.value);
-    //     inp.value = '';
-    // }
+    loadTodos() {
+        this.todoRef.onSnapshot((todoCollection) => {
+            console.log(todoCollection);
+            todoCollection.docChanges.forEach((docTodo) => {
+                var data = docTodo.doc.data();
+                data.id = docTodo.doc.id;
+                console.log(data);
+                const arr = this.state.todo;
+                arr.push(data);
+                this.setState({todo: arr})
+                console.log(this.state.todo);
+
+            })
+        })
+    }
+
     render() {
 
         return (
@@ -81,26 +88,28 @@ class Dashboard extends Component {
                 <RaisedButton label='LogOut' primary={true} onClick={this.logOut.bind(this)}/><br/>
                 <TextField hintText="Text Field" floatingLabelText="React-Todo-App"
                            onChange={this.handleChange.bind(this)} value={this.state.todoText}/>
-                <RaisedButton label="Add" primary={true} onClick={this.addTodo.bind(this)}/>
+                <RaisedButton label="Add" primary={true} onClick={this.addTodo.bind(this)}/><br/>
+                <button onClick={this.loadTodos.bind(this)}>hghhjh</button>
                 {console.log(this.state.todo)}
                 {/*<List>*/}
-                    {/*{*/}
-                        {/*this.state.todo.map((todo, i ,a)=> {*/}
-                            {/*console.log(todo);*/}
-                            {/*return (*/}
-                                {/*<ListItem*/}
-                                    {/*primaryText={todo.text}*/}
-                                    {/*secondaryText={new Date(todo.time).toLocaleString() }*/}
-                                    {/*key={i}/>*/}
-                            {/*)*/}
-                        {/*})*/}
-                    {/*}*/}
+                {/*{*/}
+                {/*this.state.todo.map((todo, i ,a)=> {*/}
+                {/*console.log(todo);*/}
+                {/*return (*/}
+                {/*<ListItem*/}
+                {/*primaryText={todo.text}*/}
+                {/*secondaryText={new Date(todo.time).toLocaleString() }*/}
+                {/*key={i}/>*/}
+                {/*)*/}
+                {/*})*/}
+                {/*}*/}
                 {/*</List>*/}
 
 
             </div>
         )
     }
+
 }
 
 export default Dashboard;
