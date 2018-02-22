@@ -18,6 +18,7 @@ class Dashboard extends Component {
             todo: []
         };
         this.resultForLogin();
+        this.loadTodos();
     }
 
     db = firebase.firestore();
@@ -61,8 +62,8 @@ class Dashboard extends Component {
                 data.id = docTodo.doc.id;
                 console.log(data);
                 const arr = this.state.todo;
-                arr.push(data);
-                this.setState({todo: arr})
+                arr.unshift(data);
+                this.setState({todo: arr});
                 console.log(this.state.todo);
 
             })
@@ -89,21 +90,18 @@ class Dashboard extends Component {
                 <TextField hintText="Text Field" floatingLabelText="React-Todo-App"
                            onChange={this.handleChange.bind(this)} value={this.state.todoText}/>
                 <RaisedButton label="Add" primary={true} onClick={this.addTodo.bind(this)}/><br/>
-                <button onClick={this.loadTodos.bind(this)}>hghhjh</button>
                 {console.log(this.state.todo)}
-                {/*<List>*/}
-                {/*{*/}
-                {/*this.state.todo.map((todo, i ,a)=> {*/}
-                {/*console.log(todo);*/}
-                {/*return (*/}
-                {/*<ListItem*/}
-                {/*primaryText={todo.text}*/}
-                {/*secondaryText={new Date(todo.time).toLocaleString() }*/}
-                {/*key={i}/>*/}
-                {/*)*/}
-                {/*})*/}
-                {/*}*/}
-                {/*</List>*/}
+                <List>{
+                this.state.todo.map((todo)=> {
+                console.log(todo);
+                return (
+                <ListItem
+                primaryText={todo.text}
+                secondaryText={new Date(todo.time).toLocaleString() }
+                key={todo.id}/>)
+                })
+                }
+                </List>
 
 
             </div>
