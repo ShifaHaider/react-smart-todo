@@ -43,35 +43,40 @@ class Dashboard extends Component {
     }
 
     addTodo() {
-        // var arr = this.state.todo;
-        // console.log(arr);
-        // arr.push
         this.todoRef.add({
             text: this.state.todoText,
             time: Date.now()
         });
-
-        // this.setState({todo: arr});
     }
 
     loadTodos() {
         this.todoRef.onSnapshot((todoCollection) => {
-            console.log(todoCollection);
             todoCollection.docChanges.forEach((docTodo) => {
                 var data = docTodo.doc.data();
                 data.id = docTodo.doc.id;
-                console.log(data);
-                const arr = this.state.todo;
-                arr.unshift(data);
-                this.setState({todo: arr});
-                console.log(this.state.todo);
-
+                if (docTodo.type == 'added') {
+                    var arr = this.state.todo;
+                    arr.unshift(data);
+                    this.setState({todo: arr});
+                }
+                else if (docTodo.type == 'removed') {
+                    var todo = this.state.todo;
+                    todo.forEach((value, ind) => {
+                        if (data.id == value.id) {
+                            todo.splice(ind, 1);
+                            this.setState({todo: todo})
+                        }
+                    })
+                }
             })
         })
     }
 
-    render() {
+    deleteTodo(todo) {
+        this.todoRef.doc(todo.id).delete();
+    }
 
+    render() {
         return (
             <div>
                 <AppBar title={'Data of ' + this.state.userData.name}/>
@@ -92,14 +97,15 @@ class Dashboard extends Component {
                 <RaisedButton label="Add" primary={true} onClick={this.addTodo.bind(this)}/><br/>
                 {console.log(this.state.todo)}
                 <List>{
-                this.state.todo.map((todo)=> {
-                console.log(todo);
-                return (
-                <ListItem
-                primaryText={todo.text}
-                secondaryText={new Date(todo.time).toLocaleString() }
-                key={todo.id}/>)
-                })
+                    this.state.todo.map((todo, index) => {
+                        console.log(index, todo);
+                        return (
+                            <ListItem
+                                primaryText={todo.text}
+                                secondaryText={new Date(todo.time).toLocaleString()}
+                                rightIcon={<button onClick={this.deleteTodo.bind(this, todo)}>Delete</button>}
+                                key={todo.id}/>)
+                    })
                 }
                 </List>
 

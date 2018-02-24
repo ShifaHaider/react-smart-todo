@@ -93,9 +93,7 @@ class Register extends Component {
                     actions={<FlatButton
                         label="Cancel"
                         primary={true}
-                        onClick={this.close.bind(this)}
-
-                    />}
+                        onClick={this.close.bind(this)}/>}
                     modal={false}
                     open={this.state.isAlertOpen}>
                     {this.state.message}
